@@ -7,7 +7,7 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 app.use(bodyParser.json()); // support json encoded bodies 
 
-var db = require('/database/database');
+var db = require('../database/database');
 var user = require('../usercontroller/usercontroller');
 var upload= require('../upload/upload');
 
@@ -57,3 +57,5 @@ app.post('/logintest', user.login);
 app.get('/memberinfo', user.memberinfo);
 app.get('/customers',user.customers);
 app.post('/deletecustomer',user.deletecustomer);
+
+module.exports=app;
