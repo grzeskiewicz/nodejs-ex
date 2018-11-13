@@ -1,5 +1,5 @@
 var express = require('express'),
-    app     = express();
+    app = express();
 var cors = require('cors');
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
@@ -49,17 +49,17 @@ io.on('connection', function(socket) {
         console.log('user disconnected');
     });
 
-    socket.on('ticketordered', function(msg) {
-        console.log('message: ' + msg);
-        io.emit('seatstakennow', msg);
+    socket.on('ticketordered', function(ticket) {
+        console.log('message: ' + ticket);
+        io.emit('seatstakennow', { showing: ticket.showing, seats: ticket.seats });
     });
 });
 
 
 var port = process.env.PORT || 8080,
-    ip   = process.env.IP   || '0.0.0.0';
+    ip = process.env.IP || '0.0.0.0';
 
 http.listen(port, ip);
 console.log('Server running on http://%s:%s', ip, port);
 
-module.exports = app ;
+module.exports = app;
