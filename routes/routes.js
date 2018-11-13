@@ -7,9 +7,9 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 app.use(bodyParser.json()); // support json encoded bodies 
 
-var db = require('./database/database');
-var user = require('./usercontroller/usercontroller');
-var upload= require('./upload/upload');
+var db = require('../database/database');
+var user = require('../usercontroller/usercontroller');
+var upload= require('../upload/upload');
 
 
 app.options('*', cors()) // include before other routes
