@@ -49,9 +49,9 @@ io.on('connection', function(socket) {
         console.log('user disconnected');
     });
 
-    socket.on('chat message', function(msg) {
+    socket.on('ticketordered', function(msg) {
         console.log('message: ' + msg);
-        io.emit('chat message', msg);
+        io.emit('seatstakennow', msg);
     });
 });
 
