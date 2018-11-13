@@ -14,12 +14,6 @@ var upload= require('../upload/upload');
 
 app.options('*', cors()) // include before other routes
 
-app.get('/', function (req, res) {
-res.send('Hello');
-});
-
-
-
 
 app.get('/showings', db.showings);
 app.get('/showingsbydate/:date', db.showingsbydate);

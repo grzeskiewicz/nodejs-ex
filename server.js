@@ -41,7 +41,7 @@ app.use('/', routes);
 
 
 
-/*
+
 io.on('connection', function(socket) {
     socket.broadcast.emit('hi');
     console.log('a user connected');
@@ -53,7 +53,7 @@ io.on('connection', function(socket) {
         console.log('message: ' + msg);
         io.emit('chat message', msg);
     });
-});*/
+});
 
 
 var port = process.env.PORT || 8080,
