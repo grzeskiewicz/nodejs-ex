@@ -14,7 +14,9 @@
     "mysql": "^2.15.0",
     "pg": "^7.4.1",
     "aws-sdk": "2.x",
-    "socket.io": "^2.1.1"
+    "socket.io": "^2.1.1",
+    "passport": "^0.4.0",
+    "passport-facebook": "^2.1.1"
   },
   "engine": {
     "node": "*",
