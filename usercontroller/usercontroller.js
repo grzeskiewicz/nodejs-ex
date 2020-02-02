@@ -88,10 +88,12 @@ var deletecustomer = function(req, res) {
 
 var login = function(req, res) {
     const connection = newClient();
+    console.log("Jestesmy tutaj w login!");
     console.log(req.body);
     connection.query("select * from customers where email='" + req.body.email + "'", function(err, rows) {
         if (err) throw err
         user = rows.rows[0];
+        console.log('96' + user);
         if (user) {
             if (!comparePassword(req.body.password, user.password)) {
                 //res.status(401).json({success:false, msg: 'Authentication failed. Wrong password.' });
