@@ -93,7 +93,7 @@ var newticket = function(req, res) {
     var results = [];
     vals.splice(1, 1);
     vals.forEach(function(params) {
-        if (params === undefined || params === '') {
+        if (params === undefined || params === '' || params === null) {
             res.json({ success: false, msg: "Missing parameters" });
         }
     });
