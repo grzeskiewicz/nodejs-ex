@@ -52,6 +52,7 @@ io.on('connection', function(socket) {
     socket.on('ticketordered', function(ticket) {
         console.log('message: ' + ticket);
         io.emit('seatstakennow', { showing: ticket.showing, seats: ticket.seats });
+        io.emit('seatstakennow2', { ticket:ticket });
     });
 });
 
