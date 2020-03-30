@@ -4,6 +4,7 @@ var router = express.Router();
 var datex = require('../date/date');
 var async = require("async");
 var moment = require('moment');
+const PDFDocument = require('pdfkit')
 const { Client } = require('pg');
 
 
@@ -113,6 +114,24 @@ var newticket = function(req, res) {
 
 
     });
+
+
+    const doc = new PDFDocument()
+   // let filename = req.body.filename
+   let filename="test";
+    // Stripping special characters
+    filename = encodeURIComponent(filename) + '.pdf'
+    // Setting response to 'attachment' (download).
+    // If you use 'inline' here it will automatically open the PDF
+  //  res.setHeader('Content-disposition', 'attachment; filename="' + filename + '"')
+  //  res.setHeader('Content-type', 'application/pdf')
+    const content = "Test content";
+    doc.y = 300
+    doc.text(content, 50, 50)
+    doc.pipe(res)
+    doc.end()
+
+
     res.json({ success: true, msg: "Tickets created!" });
 
     // connection.end();
