@@ -4,9 +4,23 @@ var router = express.Router();
 var datex = require('../date/date');
 var async = require("async");
 var moment = require('moment');
-const fs=require('fs');
+const fs = require('fs');
 const PDFDocument = require('pdfkit')
 const { Client } = require('pg');
+
+
+var nodemailer = require('nodemailer');
+
+var transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: 'cinemanode@gmail.com',
+        pass: 'Cinema123'
+    }
+});
+
+
+
 
 
 function newClient() {
@@ -22,7 +36,7 @@ function newClient() {
 
 
 
-var test = function(req, res) {
+var test = function (req, res) {
     const client = newClient();
 
     client.query("SELECT s.id,f.title,f.director,f.genre,f.length,f.category,f.imageUrl,p.normal, p.discount,r.id as room,r.seats,date from showings s, prices p, rooms r, films f WHERE s.film=f.id AND s.room=r.id AND s.price=p.id", (err, result) => {
@@ -37,9 +51,9 @@ var test = function(req, res) {
 
 
 
-var showings = function(req, res) {
+var showings = function (req, res) {
     const connection = newClient();
-    connection.query("select s.id,f.title,f.director,f.genre,f.length,f.category,f.imageUrl,p.normal, p.discount,r.id as room,r.seats,date from showings s, prices p, rooms r, films f where s.film=f.id AND s.room=r.id AND s.price=p.id ", function(err, rows) {
+    connection.query("select s.id,f.title,f.director,f.genre,f.length,f.category,f.imageUrl,p.normal, p.discount,r.id as room,r.seats,date from showings s, prices p, rooms r, films f where s.film=f.id AND s.room=r.id AND s.price=p.id ", function (err, rows) {
         if (err) res.json(err);
 
         res.json(rows.rows);
@@ -48,9 +62,9 @@ var showings = function(req, res) {
 }
 
 
-var showingsbydate = function(req, res) {
+var showingsbydate = function (req, res) {
     const connection = newClient();
-    connection.query('select s.id,f.title,f.director,f.genre,f.length,f.category,f.imageUrl,p.normal, p.discount,r.id as room,r.seats,date from showings s, prices p, rooms r, films f where s.film=f.id AND s.room=r.id AND s.price=p.id AND date::text LIKE ' + "'" + req.params.date + "%'", function(err, rows) {
+    connection.query('select s.id,f.title,f.director,f.genre,f.length,f.category,f.imageUrl,p.normal, p.discount,r.id as room,r.seats,date from showings s, prices p, rooms r, films f where s.film=f.id AND s.room=r.id AND s.price=p.id AND date::text LIKE ' + "'" + req.params.date + "%'", function (err, rows) {
         if (err) throw err
 
         res.json(rows.rows);
@@ -60,9 +74,9 @@ var showingsbydate = function(req, res) {
 }
 
 
-var seatsshowing = function(req, res) {
+var seatsshowing = function (req, res) {
     const connection = newClient();
-    connection.query("select r.seats from showings s, rooms r where r.id=s.room AND s.id='" + req.params.showingid + "'", function(err, rows) {
+    connection.query("select r.seats from showings s, rooms r where r.id=s.room AND s.id='" + req.params.showingid + "'", function (err, rows) {
         if (err) throw err
 
         res.json(rows.rows[0]);
@@ -72,10 +86,10 @@ var seatsshowing = function(req, res) {
 }
 
 
-var seatstaken = function(req, res) {
+var seatstaken = function (req, res) {
     const connection = newClient();
     //console.log(JSON.stringify(req.params.showingid));
-    connection.query("select seat from tickets where showing='" + req.params.showingid + "'", function(err, rows) {
+    connection.query("select seat from tickets where showing='" + req.params.showingid + "'", function (err, rows) {
         if (err) throw err
         var arr = [];
         for (var i in rows.rows) {
@@ -87,24 +101,24 @@ var seatstaken = function(req, res) {
 
 }
 
-var newticket = function(req, res) {
+var newticket = function (req, res) {
 
-    var vals = Object.keys(req.body).map(function(key) {
+    var vals = Object.keys(req.body).map(function (key) {
         return req.body[key];
     });
     var results = [];
     vals.splice(1, 1);
-    vals.forEach(function(params) {
+    vals.forEach(function (params) {
         if (params === undefined || params === '' || params === null) {
             res.json({ success: false, msg: "Missing parameters" });
         }
     });
     var seats = req.body.seats;
     //console.log(vals);
-    async.forEachOf(seats, function(seat) {
+    async.forEachOf(seats, function (seat) {
         const connection = newClient();
         //2018-05-02T09:28:00.000Z
-        connection.query("INSERT INTO tickets(showing,seat,price,email,status,purchasedate) VALUES($1," + seat + ",$2,$3,'1','" + moment().format() + "')", vals, function(err, result) {
+        connection.query("INSERT INTO tickets(showing,seat,price,email,status,purchasedate) VALUES($1," + seat + ",$2,$3,'1','" + moment().format() + "')", vals, function (err, result) {
             // if (err) res.json({ success: false, msg: err });
             //console.log("KURDE");
             //          console.log(result, err);
@@ -116,24 +130,41 @@ var newticket = function(req, res) {
 
     });
 
+    //send an email with confirmation
 
-    const doc = new PDFDocument()
-   // let filename = req.body.filename
-   let filename="test";
-    // Stripping special characters
-    filename = encodeURIComponent(filename) + '.pdf'
-    // Setting response to 'attachment' (download).
-    // If you use 'inline' here it will automatically open the PDF
-  //  res.setHeader('Content-disposition', 'attachment; filename="' + filename + '"')
-  //  res.setHeader('Content-type', 'application/pdf')
+    var mailOptions = {
+        from: 'cinemanode@gmail.com',
+        to: 'benuch91@gmail.com',
+        subject: 'Sending Email using Node.js',
+        text: 'That was easy!'
+    };
 
+    transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+            console.log(error);
+        } else {
+            console.log('Email sent: ' + info.response);
+        }
+    });
 
-    const content = "Test content";
-    doc.y = 300
-    doc.text(content, 50, 50)
-    doc.pipe(fs.createWriteStream('/tmp/output.pdf'));
-   // doc.pipe(res)
-    doc.end()
+    /* PDF creating test
+        const doc = new PDFDocument()
+       // let filename = req.body.filename
+       let filename="test";
+        // Stripping special characters
+        filename = encodeURIComponent(filename) + '.pdf'
+        // Setting response to 'attachment' (download).
+        // If you use 'inline' here it will automatically open the PDF
+      //  res.setHeader('Content-disposition', 'attachment; filename="' + filename + '"')
+      //  res.setHeader('Content-type', 'application/pdf')
+    
+    
+        const content = "Test content";
+        doc.y = 300
+        doc.text(content, 50, 50)
+        doc.pipe(fs.createWriteStream('/tmp/output.pdf'));
+       // doc.pipe(res)
+        doc.end() */
 
 
     res.json({ success: true, msg: "Tickets created!" });
@@ -145,9 +176,9 @@ var newticket = function(req, res) {
 
 
 
-var newshowing = function(req, res) {
+var newshowing = function (req, res) {
     const params = req.body;
-    const values = Object.keys(req.body).map(function(key) {
+    const values = Object.keys(req.body).map(function (key) {
         return req.body[key];
     });
 
@@ -160,7 +191,7 @@ var newshowing = function(req, res) {
 
     const connection = newClient();
     //2018-08-03T09:28:00.000Z
-    connection.query("INSERT INTO showings(film,price,room,date) VALUES($1,$2,$3,$4)", values, function(err, result) {
+    connection.query("INSERT INTO showings(film,price,room,date) VALUES($1,$2,$3,$4)", values, function (err, result) {
         // if (err) res.json({ success: false, msg: err });
         //console.log(result, err);
         console.log(result, err);
@@ -177,16 +208,16 @@ var newshowing = function(req, res) {
 
 
 
-var newfilm = function(req, res) {
+var newfilm = function (req, res) {
     const params = req.body;
-    const values = Object.keys(req.body).map(function(key) {
+    const values = Object.keys(req.body).map(function (key) {
         return req.body[key];
     });
 
 
     const connection = newClient();
     //2018-08-03T09:28:00.000Z
-    connection.query("INSERT INTO films(title,director,genre,length,category,imageurl) VALUES($1,$2,$3,$4,$5,$6)", values, function(err, result) {
+    connection.query("INSERT INTO films(title,director,genre,length,category,imageurl) VALUES($1,$2,$3,$4,$5,$6)", values, function (err, result) {
         // if (err) res.json({ success: false, msg: err });
         //console.log(result, err);
         //console.log(result, err);
@@ -202,16 +233,16 @@ var newfilm = function(req, res) {
 }
 
 
-var newprice = function(req, res) {
+var newprice = function (req, res) {
     const params = req.body;
-    const values = Object.keys(req.body).map(function(key) {
+    const values = Object.keys(req.body).map(function (key) {
         return req.body[key];
     });
 
 
     const connection = newClient();
     //2018-08-03T09:28:00.000Z
-    connection.query("INSERT INTO prices(normal,discount) VALUES($1,$2)", values, function(err, result) {
+    connection.query("INSERT INTO prices(normal,discount) VALUES($1,$2)", values, function (err, result) {
         // if (err) res.json({ success: false, msg: err });
         if (err) throw err;
         connection.end();
@@ -225,7 +256,7 @@ var newprice = function(req, res) {
 }
 
 
-var deleteshowingfunc = function(showid) {
+var deleteshowingfunc = function (showid) {
     const connection = newClient();
     connection.query("DELETE FROM SHOWINGS WHERE ID=" + showid).then(res2 => {
         //  console.log(res2,showid);
@@ -233,7 +264,7 @@ var deleteshowingfunc = function(showid) {
     }).catch(e => console.error(e.stack));
 }
 
-var deleteshowing = function(req, res) {
+var deleteshowing = function (req, res) {
     const params = req.body;
     deleteshowingfunc(params.showid);
     res.json({ succes: true, msg: params.showid });
@@ -241,11 +272,11 @@ var deleteshowing = function(req, res) {
 
 
 
-var deletefilm = function(req, res) { // delete tickets(showing(film))
+var deletefilm = function (req, res) { // delete tickets(showing(film))
     const params = req.body;
     const connection = newClient();
 
-    connection.query("DELETE FROM FILMS WHERE ID=" + params.filmid, function(err, result) {
+    connection.query("DELETE FROM FILMS WHERE ID=" + params.filmid, function (err, result) {
         if (err) throw err;
         connection.end();
 
@@ -257,9 +288,9 @@ var deletefilm = function(req, res) { // delete tickets(showing(film))
 
 }
 
-var editfilm = function(req, res) {
+var editfilm = function (req, res) {
     const params = req.body;
-    const values = Object.keys(params).map(function(key) {
+    const values = Object.keys(params).map(function (key) {
         return params[key];
     });
 
@@ -267,7 +298,7 @@ var editfilm = function(req, res) {
     console.log(values);
     const connection = newClient();
 
-    connection.query("UPDATE films SET title=($1),director=($2),genre=($3),length=($4),category=($5) WHERE id=" + params.id, values, function(err, result) {
+    connection.query("UPDATE films SET title=($1),director=($2),genre=($3),length=($4),category=($5) WHERE id=" + params.id, values, function (err, result) {
         if (err) throw err;
         connection.end();
 
@@ -277,9 +308,9 @@ var editfilm = function(req, res) {
 }
 
 
-var editcustomer = function(req, res) {
+var editcustomer = function (req, res) {
     const params = req.body;
-    const values = Object.keys(params).map(function(key) {
+    const values = Object.keys(params).map(function (key) {
         return params[key];
     });
 
@@ -287,7 +318,7 @@ var editcustomer = function(req, res) {
     console.log(values);
     const connection = newClient();
 
-    connection.query("UPDATE customers SET email=($1),name=($2),surename=($3),telephone=($4) WHERE id=" + params.id, values, function(err, result) {
+    connection.query("UPDATE customers SET email=($1),name=($2),surename=($3),telephone=($4) WHERE id=" + params.id, values, function (err, result) {
         if (err) throw err;
         connection.end();
 
@@ -297,10 +328,10 @@ var editcustomer = function(req, res) {
 }
 
 
-var deleteprice = function(req, res) { //delete tickets(showing(price))
+var deleteprice = function (req, res) { //delete tickets(showing(price))
     const params = req.body;
     const connection = newClient();
-    connection.query("DELETE FROM PRICES WHERE ID=" + params.priceid, function(err, result) {
+    connection.query("DELETE FROM PRICES WHERE ID=" + params.priceid, function (err, result) {
 
     });
 
@@ -308,10 +339,10 @@ var deleteprice = function(req, res) { //delete tickets(showing(price))
 }
 
 
-var deleteticket = function(req, res) { //delete tickets(showing(price))
+var deleteticket = function (req, res) { //delete tickets(showing(price))
     const params = req.body;
     const connection = newClient();
-    connection.query("DELETE FROM TICKETS WHERE ID=" + params.ticketid, function(err, result) {
+    connection.query("DELETE FROM TICKETS WHERE ID=" + params.ticketid, function (err, result) {
 
     });
 
@@ -319,9 +350,9 @@ var deleteticket = function(req, res) { //delete tickets(showing(price))
 }
 
 //select t.id ,s.title, t.seat,t.price,t.email,t.status,t.purchasedate FROM tickets t, showings s WHERE t.showing=s.id"
-var ticketsquery = function(req, res) {
+var ticketsquery = function (req, res) {
     const connection = newClient();
-    connection.query('select t.id, f.title, t.seat, t.price, t.email, t.status, t.purchasedate FROM tickets t, films f, showings s WHERE s.id=t.showing AND f.id=s.film', function(err, rows) {
+    connection.query('select t.id, f.title, t.seat, t.price, t.email, t.status, t.purchasedate FROM tickets t, films f, showings s WHERE s.id=t.showing AND f.id=s.film', function (err, rows) {
         if (err) res.json(err);
         //console.log(rows);
         res.json(rows.rows);
@@ -330,11 +361,11 @@ var ticketsquery = function(req, res) {
 }
 
 
-var ticketsbycustomer = function(req, res) {
+var ticketsbycustomer = function (req, res) {
     const params = req.body;
     console.log(params.customerid);
     const connection = newClient();
-    connection.query("select * from tickets  t, showings s, films f WHERE t.showing=s.id AND s.film=f.id AND email IN (SELECT email FROM customers WHERE id=" + params.customerid + ")", function(err, rows) {
+    connection.query("select * from tickets  t, showings s, films f WHERE t.showing=s.id AND s.film=f.id AND email IN (SELECT email FROM customers WHERE id=" + params.customerid + ")", function (err, rows) {
         if (err) res.json(err);
         console.log('ticketscustomer', rows.length);
         res.json(rows.rows);
@@ -344,9 +375,9 @@ var ticketsbycustomer = function(req, res) {
 
 
 
-var showingsquery = function(req, res) {
+var showingsquery = function (req, res) {
     const connection = newClient();
-    connection.query("select * from showings", function(err, rows) {
+    connection.query("select * from showings", function (err, rows) {
         if (err) res.json(err);
         res.json(rows.rows);
         connection.end();
@@ -354,9 +385,9 @@ var showingsquery = function(req, res) {
 }
 
 
-var roomsquery = function(req, res) {
+var roomsquery = function (req, res) {
     const connection = newClient();
-    connection.query("select * from rooms", function(err, rows) {
+    connection.query("select * from rooms", function (err, rows) {
         if (err) res.json(err);
         res.json(rows.rows);
         connection.end();
@@ -364,9 +395,9 @@ var roomsquery = function(req, res) {
 }
 
 
-var pricesquery = function(req, res) {
+var pricesquery = function (req, res) {
     const connection = newClient();
-    connection.query("select * from prices", function(err, rows) {
+    connection.query("select * from prices", function (err, rows) {
         if (err) res.json(err);
         res.json(rows.rows);
         connection.end();
@@ -374,9 +405,9 @@ var pricesquery = function(req, res) {
 }
 
 
-var filmsquery = function(req, res) {
+var filmsquery = function (req, res) {
     const connection = newClient();
-    connection.query("select * from films", function(err, rows) {
+    connection.query("select * from films", function (err, rows) {
         if (err) res.json(err);
         res.json(rows.rows);
         connection.end();
@@ -384,4 +415,4 @@ var filmsquery = function(req, res) {
 }
 
 
-module.exports = { showings, mysql, showingsbydate, seatsshowing, seatstaken, newticket, ticketsquery, filmsquery, pricesquery, roomsquery, showingsquery, test, newshowing, newfilm,newprice, deleteshowing, deletefilm, deleteprice, deleteticket, ticketsbycustomer, editfilm, editcustomer };
+module.exports = { showings, mysql, showingsbydate, seatsshowing, seatstaken, newticket, ticketsquery, filmsquery, pricesquery, roomsquery, showingsquery, test, newshowing, newfilm, newprice, deleteshowing, deletefilm, deleteprice, deleteticket, ticketsbycustomer, editfilm, editcustomer };
