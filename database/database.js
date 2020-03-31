@@ -4,6 +4,7 @@ var router = express.Router();
 var datex = require('../date/date');
 var async = require("async");
 var moment = require('moment');
+const fs=require('fs');
 const PDFDocument = require('pdfkit')
 const { Client } = require('pg');
 
