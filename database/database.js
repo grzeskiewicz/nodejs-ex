@@ -131,7 +131,8 @@ var newticket = function (req, res) {
     });
 
     //send an email with confirmation
-
+    console.log("Vals");
+console.log(vals);
     var mailOptions = {
         from: 'cinemanode@gmail.com',
         to: 'benuch91@gmail.com',
