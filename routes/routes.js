@@ -39,6 +39,7 @@ app.get('/prices', db.pricesquery);
 app.get('/films', db.filmsquery);
 app.get('/showingsquery', db.showingsquery);
 app.post('/ticketsbycustomer', db.ticketsbycustomer);
+app.post('/sendtickets', db.sendtickets);
 //app.post('/upload',upload.upload);
 
 app.get('/sign-s3', upload.signin);
@@ -67,11 +68,11 @@ app.get('/success', (req, res) => {
 
 });
 app.get('/error', (req, res) => res.send("error logging in"));
-passport.serializeUser(function(user, cb) {
+passport.serializeUser(function (user, cb) {
     // console.log(user);
     cb(null, user);
 });
-passport.deserializeUser(function(obj, cb) {
+passport.deserializeUser(function (obj, cb) {
     cb(null, obj);
 });
 
@@ -81,11 +82,11 @@ const FacebookStrategy = require('passport-facebook').Strategy;
 const FACEBOOK_APP_ID = '255080745147654';
 const FACEBOOK_APP_SECRET = 'fcce20e07201bd900e9d465e69f29f0e';
 passport.use(new FacebookStrategy({
-        clientID: FACEBOOK_APP_ID,
-        clientSecret: FACEBOOK_APP_SECRET,
-        callbackURL: "/auth/facebook/callback"
-    },
-    function(accessToken, refreshToken, profile, cb) {
+    clientID: FACEBOOK_APP_ID,
+    clientSecret: FACEBOOK_APP_SECRET,
+    callbackURL: "/auth/facebook/callback"
+},
+    function (accessToken, refreshToken, profile, cb) {
         //console.log(profile.displayName);
         return cb(null, profile);
     }
@@ -94,7 +95,7 @@ app.get('/auth/facebook',
     passport.authenticate('facebook'));
 app.get('/auth/facebook/callback',
     passport.authenticate('facebook', { failureRedirect: '/error' }),
-    function(req, res) {
+    function (req, res) {
         res.redirect(`/success`);
     });
 

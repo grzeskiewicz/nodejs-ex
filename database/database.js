@@ -416,4 +416,13 @@ var filmsquery = function (req, res) {
 }
 
 
-module.exports = { showings, mysql, showingsbydate, seatsshowing, seatstaken, newticket, ticketsquery, filmsquery, pricesquery, roomsquery, showingsquery, test, newshowing, newfilm, newprice, deleteshowing, deletefilm, deleteprice, deleteticket, ticketsbycustomer, editfilm, editcustomer };
+
+var sendtickets = function (req, res) { 
+
+    const params = req.body;
+    console.log(params);
+    res.json({"msg": params})
+}
+
+
+module.exports = { showings, mysql, showingsbydate, seatsshowing, seatstaken, newticket, ticketsquery, filmsquery, pricesquery, roomsquery, showingsquery, test, newshowing, newfilm, newprice, deleteshowing, deletefilm, deleteprice, deleteticket, ticketsbycustomer, editfilm, editcustomer, sendtickets };
