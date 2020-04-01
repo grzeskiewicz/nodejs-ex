@@ -130,23 +130,6 @@ var newticket = function (req, res) {
 
     });
 
-    //send an email with confirmation
-    console.log("Vals");
-console.log(vals);
-    var mailOptions = {
-        from: 'cinemanode@gmail.com',
-        to: 'benuch91@gmail.com',
-        subject: 'Sending Email using Node.js',
-        text: 'That was easy!'
-    };
-
-    transporter.sendMail(mailOptions, function (error, info) {
-        if (error) {
-            console.log(error);
-        } else {
-            console.log('Email sent: ' + info.response);
-        }
-    });
 
     /* PDF creating test
         const doc = new PDFDocument()
@@ -420,7 +403,22 @@ var filmsquery = function (req, res) {
 var sendtickets = function (req, res) { 
 
     const params = req.body;
-    console.log(params);
+    console.log(params.tickets);
+
+    var mailOptions = {
+        from: 'cinemanode@gmail.com',
+        to: 'benuch91@gmail.com',
+        subject: 'Tickets Cinemanode',
+        text: params.tickets
+    };
+
+    transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+            console.log(error);
+        } else {
+            console.log('Email sent: ' + info.response);
+        }
+    });
     res.json({"msg": params})
 }
 
