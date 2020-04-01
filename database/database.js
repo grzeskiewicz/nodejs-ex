@@ -101,11 +101,31 @@ var seatstaken = function (req, res) {
 
 }
 
+const sendEmail= (tickets) => {
+    var mailOptions = {
+        from: 'cinemanode@gmail.com',
+        to: 'benuch91@gmail.com',
+        subject: 'Tickets Cinemanode',
+        html: params.tickets
+    };
+
+    transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+            console.log(error);
+        } else {
+            console.log('Email sent: ' + info.response);
+        }
+    });
+}
+
+
+
 var newticket = function (req, res) {
 
     var vals = Object.keys(req.body).map(function (key) {
         return req.body[key];
     });
+    console.log(vals);
     var results = [];
     vals.splice(1, 1);
     vals.forEach(function (params) {
@@ -114,7 +134,7 @@ var newticket = function (req, res) {
         }
     });
     var seats = req.body.seats;
-    //console.log(vals);
+    console.log(vals.showingDesc);
     async.forEachOf(seats, function (seat) {
         const connection = newClient();
         //2018-05-02T09:28:00.000Z
