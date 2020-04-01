@@ -121,11 +121,11 @@ const sendEmail= (tickets) => {
 
 
 var newticket = function (req, res) {
-
+console.log(req.body);
     var vals = Object.keys(req.body).map(function (key) {
         return req.body[key];
     });
-    console.log(vals);
+    //console.log(vals);
     var results = [];
     vals.splice(1, 1);
     console.log(vals);
@@ -135,7 +135,7 @@ var newticket = function (req, res) {
         }
     });
     var seats = req.body.seats;
-    console.log(vals.showingDesc);
+    //console.log(vals.showingDesc);
     async.forEachOf(seats, function (seat) {
         const connection = newClient();
         //2018-05-02T09:28:00.000Z
