@@ -128,6 +128,7 @@ var newticket = function (req, res) {
     console.log(vals);
     var results = [];
     vals.splice(1, 1);
+    console.log(vals);
     vals.forEach(function (params) {
         if (params === undefined || params === '' || params === null) {
             res.json({ success: false, msg: "Missing parameters" });
