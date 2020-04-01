@@ -409,7 +409,7 @@ var sendtickets = function (req, res) {
         from: 'cinemanode@gmail.com',
         to: 'benuch91@gmail.com',
         subject: 'Tickets Cinemanode',
-        text: params.tickets
+        html: params.tickets
     };
 
     transporter.sendMail(mailOptions, function (error, info) {
