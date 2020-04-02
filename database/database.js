@@ -103,11 +103,17 @@ var seatstaken = function (req, res) {
 
 const sendEmail = (tickets) => {
     console.log(tickets);
+    htmlTemplate = `<div>
+    <h1>Tickets for you!</h1>
+    <p>${tickets.showingDesc.title} Date:${tickets.showing.showingDesc.fullDate} ${tickets.showing.showingDesc.date}</p>
+    <p>Seats: ${tickets.seats}</p>
+    </div>`;
+
     var mailOptions = {
         from: 'cinemanode@gmail.com',
         to: 'benuch91@gmail.com',
         subject: 'Tickets Cinemanode',
-        text: JSON.stringify(tickets)
+        html: htmlTemplate
     };
 
     transporter.sendMail(mailOptions, function (error, info) {
@@ -152,7 +158,7 @@ var newticket = function (req, res) {
     });
 
 
-   
+
 
 
 
