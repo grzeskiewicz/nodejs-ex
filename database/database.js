@@ -103,11 +103,23 @@ var seatstaken = function (req, res) {
 
 const sendEmail = (tickets) => {
     console.log(tickets);
-    htmlTemplate = `<div>
-    <h1>Tickets for you!</h1>
-    <p>${tickets.showingDesc.title} Date:${tickets.showingDesc.fullDate} ${tickets.showingDesc.date}</p>
-    <p>Seats: ${tickets.seats}</p>
-    </div>`;
+    htmlTemplate = `
+    <html>
+    <head>
+      <meta charset="utf-8">
+      <link rel="stylesheet" type="text/css" href="email.css">
+    </head>
+    <body>
+    <div>
+    <h1>Hello!</h1>
+    <h2>You have successfully ordered tickets for the show:</h2>
+        <div id="ticket">
+        <p>${tickets.showingDesc.title} Date:${tickets.showingDesc.fullDate} ${tickets.showingDesc.date}</p>
+        <p>Seats: ${tickets.seats}</p>
+        <div>
+    </div>    
+    </body>
+  </html>`;
 
     var mailOptions = {
         from: 'cinemanode@gmail.com',
