@@ -111,14 +111,14 @@ const sendEmail = (tickets) => {
     </head>
     <body>
     <div>
-    <h2>Hello!</h3>
+    <h2>Hello!</h2>
     <h3>You have successfully ordered tickets for the show:</h3>
         <div id="ticket">
         <p>${tickets.showingDesc.title} Date:${tickets.showingDesc.fullDate} ${tickets.showingDesc.date}</p>
         <p style="font-weight:bold;">Seats: ${tickets.seats}</p>
         <hr><p>Tickets are attached in the email!</p>
         <div>
-        <p style="color:red;">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod 
+        <p style="color:red;font-weight:normal;">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod 
         tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, 
         quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
         Duis aute irure dolor in reprehenderit in voluptate velit esse cillum 
