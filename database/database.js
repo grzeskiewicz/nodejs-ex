@@ -107,7 +107,7 @@ const sendEmail = (tickets) => {
         from: 'cinemanode@gmail.com',
         to: 'benuch91@gmail.com',
         subject: 'Tickets Cinemanode',
-        html: tickets
+        text: tickets
     };
 
     transporter.sendMail(mailOptions, function (error, info) {
