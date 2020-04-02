@@ -121,14 +121,14 @@ const sendEmail= (tickets) => {
 
 
 var newticket = function (req, res) {
-console.log(req.body.showing);
+console.log(req.body.showingDesc);
     var vals = Object.keys(req.body).map(function (key) {
         return req.body[key];
     });
     //console.log(vals);
     var results = [];
     vals.splice(1, 1);
-   // console.log(vals);
+    console.log(vals);
     vals.forEach(function (params) {
         if (params === undefined || params === '' || params === null) {
             res.json({ success: false, msg: "Missing parameters" });
