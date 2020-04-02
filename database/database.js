@@ -103,11 +103,11 @@ var seatstaken = function (req, res) {
 
 const sendEmail = (tickets) => {
     console.log(tickets);
-  /*  var mailOptions = {
+    var mailOptions = {
         from: 'cinemanode@gmail.com',
         to: 'benuch91@gmail.com',
         subject: 'Tickets Cinemanode',
-        html: params.tickets
+        html: tickets
     };
 
     transporter.sendMail(mailOptions, function (error, info) {
@@ -116,7 +116,7 @@ const sendEmail = (tickets) => {
         } else {
             console.log('Email sent: ' + info.response);
         }
-    });*/
+    });
 }
 
 
