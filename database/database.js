@@ -102,7 +102,8 @@ var seatstaken = function (req, res) {
 }
 
 const sendEmail = (tickets) => {
-    var mailOptions = {
+    console.log(tickets);
+  /*  var mailOptions = {
         from: 'cinemanode@gmail.com',
         to: 'benuch91@gmail.com',
         subject: 'Tickets Cinemanode',
@@ -115,7 +116,7 @@ const sendEmail = (tickets) => {
         } else {
             console.log('Email sent: ' + info.response);
         }
-    });
+    });*/
 }
 
 
@@ -124,7 +125,7 @@ var newticket = function (req, res) {
 
     const showingDesc = req.body.showingDesc;
     delete req.body.showingDesc;
-    var vals = Object.keys(req.body).map(function (key) {
+    var vals = Object.keys(req.body).map(function (key) { // DO I NEED IT??
         return req.body[key];
     });
     //console.log(vals);
@@ -143,15 +144,16 @@ var newticket = function (req, res) {
         //2018-05-02T09:28:00.000Z
         connection.query("INSERT INTO tickets(showing,seat,price,email,status,purchasedate) VALUES($1," + seat + ",$2,$3,'1','" + moment().format() + "')", vals, function (err, result) {
             // if (err) res.json({ success: false, msg: err });
-            //console.log("KURDE");
-            //          console.log(result, err);
             if (err) throw err;
             connection.end();
-
         });
 
 
     });
+
+
+    sendEmail(req.body);
+
 
 
     /* PDF creating test
