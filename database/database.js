@@ -105,7 +105,7 @@ const sendEmail = (tickets) => {
     console.log(tickets);
     htmlTemplate = `<div>
     <h1>Tickets for you!</h1>
-    <p>${tickets.showingDesc.title} Date:${tickets.showing.showingDesc.fullDate} ${tickets.showing.showingDesc.date}</p>
+    <p>${tickets.showingDesc.title} Date:${tickets.showingDesc.fullDate} ${tickets.showingDesc.date}</p>
     <p>Seats: ${tickets.seats}</p>
     </div>`;
 
