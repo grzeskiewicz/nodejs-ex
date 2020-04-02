@@ -101,7 +101,7 @@ var seatstaken = function (req, res) {
 
 }
 
-const sendEmail= (tickets) => {
+const sendEmail = (tickets) => {
     var mailOptions = {
         from: 'cinemanode@gmail.com',
         to: 'benuch91@gmail.com',
@@ -121,7 +121,9 @@ const sendEmail= (tickets) => {
 
 
 var newticket = function (req, res) {
-console.log(req.body.showingDesc);
+
+    const showingDesc = req.body.showingDesc;
+    delete req.body.showingDesc;
     var vals = Object.keys(req.body).map(function (key) {
         return req.body[key];
     });
@@ -199,7 +201,7 @@ var newshowing = function (req, res) {
     connection.query("INSERT INTO showings(film,price,room,date) VALUES($1,$2,$3,$4)", values, function (err, result) {
         // if (err) res.json({ success: false, msg: err });
         //console.log(result, err);
-       // console.log(result, err);
+        // console.log(result, err);
         if (err) throw err;
         connection.end();
 
@@ -372,7 +374,7 @@ var ticketsbycustomer = function (req, res) {
     const connection = newClient();
     connection.query("select * from tickets  t, showings s, films f WHERE t.showing=s.id AND s.film=f.id AND email IN (SELECT email FROM customers WHERE id=" + params.customerid + ")", function (err, rows) {
         if (err) res.json(err);
-      //  console.log('ticketscustomer', rows.length);
+        //  console.log('ticketscustomer', rows.length);
         res.json(rows.rows);
         connection.end();
     });
@@ -421,7 +423,7 @@ var filmsquery = function (req, res) {
 
 
 
-var sendtickets = function (req, res) { 
+var sendtickets = function (req, res) {
 
     const params = req.body;
     console.log(params.tickets);
@@ -440,7 +442,7 @@ var sendtickets = function (req, res) {
             console.log('Email sent: ' + info.response);
         }
     });
-    res.json({"msg": params})
+    res.json({ "msg": params })
 }
 
 
