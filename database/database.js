@@ -128,7 +128,7 @@ console.log(req.body);
     //console.log(vals);
     var results = [];
     vals.splice(1, 1);
-    console.log(vals);
+   // console.log(vals);
     vals.forEach(function (params) {
         if (params === undefined || params === '' || params === null) {
             res.json({ success: false, msg: "Missing parameters" });
