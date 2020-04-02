@@ -122,7 +122,7 @@ const sendEmail = (tickets) => {
 
 
 var newticket = function (req, res) {
-
+    sendEmail(req.body);
     const showingDesc = req.body.showingDesc;
     delete req.body.showingDesc;
     var vals = Object.keys(req.body).map(function (key) { // DO I NEED IT??
@@ -152,7 +152,7 @@ var newticket = function (req, res) {
     });
 
 
-    sendEmail(req.body);
+   
 
 
 
