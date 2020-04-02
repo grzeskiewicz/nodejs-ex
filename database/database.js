@@ -121,7 +121,7 @@ const sendEmail= (tickets) => {
 
 
 var newticket = function (req, res) {
-console.log(req.body);
+console.log(req.body.showing);
     var vals = Object.keys(req.body).map(function (key) {
         return req.body[key];
     });
@@ -199,7 +199,7 @@ var newshowing = function (req, res) {
     connection.query("INSERT INTO showings(film,price,room,date) VALUES($1,$2,$3,$4)", values, function (err, result) {
         // if (err) res.json({ success: false, msg: err });
         //console.log(result, err);
-        console.log(result, err);
+       // console.log(result, err);
         if (err) throw err;
         connection.end();
 
@@ -368,11 +368,11 @@ var ticketsquery = function (req, res) {
 
 var ticketsbycustomer = function (req, res) {
     const params = req.body;
-    console.log(params.customerid);
+    //console.log(params.customerid);
     const connection = newClient();
     connection.query("select * from tickets  t, showings s, films f WHERE t.showing=s.id AND s.film=f.id AND email IN (SELECT email FROM customers WHERE id=" + params.customerid + ")", function (err, rows) {
         if (err) res.json(err);
-        console.log('ticketscustomer', rows.length);
+      //  console.log('ticketscustomer', rows.length);
         res.json(rows.rows);
         connection.end();
     });
