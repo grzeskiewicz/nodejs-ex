@@ -125,7 +125,7 @@ const sendEmail = (tickets) => {
         dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, 
         sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
     </div> <hr>   
-    <div id="footer">
+    <div id="footer" style="display:flex; flex-flow:column; justify-content:center;">
     <p style="color:green;">FOOTER CINEMA'S DATA</p>
     <p>LOGO</p>
     </div> 
