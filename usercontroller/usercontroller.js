@@ -64,8 +64,11 @@ var register = function (req, res) {
         connection.query("INSERT INTO customers(email,password,name,surename,telephone) VALUES($1,$2,$3,$4,$5)", vals, function (err, result) {
             console.log("INSERT");
             if (err) {
-                console.log(err.code);
-                if (err.code === 23505) res.json({ success: false, msg: "User exists already!" });
+                console.log(typeof err.code);
+                if (err.code === 23505) {
+                    console.log("JESTEM W CODE");
+                    res.json({ success: false, msg: "User exists already!" });
+                }
             } else {
                 sendEmailRegistered(req.body.email, req.body.name);
                 res.json({ success: true, msg: "Rejestracja zakończona powodzeniem!" });
