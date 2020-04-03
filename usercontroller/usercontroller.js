@@ -65,8 +65,7 @@ var register = function (req, res) {
             console.log("INSERT");
             if (err) {
                 console.log(err.code);
-                if (err.code === 23505)
-                res.json({ success: false, msg: "User exists already!" });
+                if (err.code === 23505) res.json({ success: false, msg: "User exists already!" });
             }
             console.log(result);
             sendEmailRegistered(req.body.email, req.body.name);
