@@ -65,7 +65,7 @@ var register = function (req, res) {
             console.log("INSERT");
             if (err) {
                 console.log(typeof err.code);
-                if (err.code === 23505) {
+                if (err.code === "23505") {
                     console.log("JESTEM W CODE");
                     res.json({ success: false, msg: "User exists already!" });
                 }
