@@ -53,6 +53,7 @@ var register = function (req, res) {
     connection.query(`select 1 from customers where email='${req.body.email}'`, function (err, rows) {
         if (err) throw err;
         userExists = rows.rows[0];
+        console.log(req.body.email, rows);
     });
 
     if (userExists) {
