@@ -66,11 +66,13 @@ var register = function (req, res) {
             if (err) {
                 console.log(err.code);
                 if (err.code === 23505) res.json({ success: false, msg: "User exists already!" });
+            } else {
+                sendEmailRegistered(req.body.email, req.body.name);
+                res.json({ success: true, msg: "Rejestracja zakończona powodzeniem!" });
+                connection.end();
             }
             console.log(result);
-            sendEmailRegistered(req.body.email, req.body.name);
-            res.json({ success: true, msg: "Rejestracja zakończona powodzeniem!" });
-            connection.end();
+
         });
     }
 
