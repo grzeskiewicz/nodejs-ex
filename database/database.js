@@ -101,6 +101,10 @@ var seatstaken = function (req, res) {
 
 }
 
+
+
+
+
 const sendEmail = (tickets) => {
     console.log(tickets);
     htmlTemplate = `
