@@ -62,12 +62,10 @@ var register = function (req, res) {
     } else {
         vals[1] = bcrypt.hashSync(req.body.password, 10);
         connection.query("INSERT INTO customers(email,password,name,surename,telephone) VALUES($1,$2,$3,$4,$5)", vals, function (err, result) {
-            console.log("INSERT");
             if (err) {
-                console.log(typeof err.code);
-                if (err.code === "23505") {
-                    console.log("JESTEM W CODE");
-                    res.json({ success: false, msg: "User exists already!" });
+                if (err.code === "23505") { //23505 code for key existing already
+                     res.json({ success: false, msg: "User exists already!" });
+                     connection.end();
                 }
             } else {
                 sendEmailRegistered(req.body.email, req.body.name);
