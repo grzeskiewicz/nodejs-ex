@@ -138,7 +138,7 @@ const sendEmail = (tickets) => {
 
     var mailOptions = {
         from: 'cinemanode@gmail.com',
-        to: 'benuch91@gmail.com',
+        to: tickets.email,
         subject: 'Tickets Cinemanode',
         html: htmlTemplate
     };
