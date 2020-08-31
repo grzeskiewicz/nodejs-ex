@@ -157,7 +157,7 @@ const login = function (req, res) {
         if (user) {
             if (!comparePassword(req.body.password, user.password)) {
                 //res.status(401).json({success:false, msg: 'Authentication failed. Wrong password.' });
-                res.json({ success: false, msg: " Authentication failed. Wrong password" });
+                res.json({ success: false, msg: "Authentication failed. Wrong password" });
             } else {
                 return res.json({ success: true, msg: "Loging in success!", token: 'JWT ' + jwt.sign({ email: user.email, name: user.name, surename: user.surename, id: user.id }, 'RESTFULAPIs') });
             }
@@ -203,7 +203,6 @@ const memberinfo = function (req, res, next) {
 
 
 const loginRequired = function (req, res, next) {
-    //const connection = newClient();
     if (req.user) {
         console.log("loginRequired");
         next();
