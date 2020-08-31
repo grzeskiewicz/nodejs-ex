@@ -1,11 +1,11 @@
-var bcrypt = require('bcrypt');
-var mysql = require('mysql');
-var jwt = require('jsonwebtoken');
-var express = require('express');
-var app = express();
-var cors = require('cors');
+const bcrypt = require('bcrypt');
+const mysql = require('mysql');
+const jwt = require('jsonwebtoken');
+const express = require('express');
+const app = express();
+const cors = require('cors');
 
-var bodyParser = require('body-parser');
+const bodyParser = require('body-parser');
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 app.use(bodyParser.json()); // support json encoded bodies 
@@ -17,9 +17,9 @@ app.use(function(req, res, next) {
     next();
 });*/
 
-var nodemailer = require('nodemailer');
+const nodemailer = require('nodemailer');
 
-var transporter = nodemailer.createTransport({
+const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
         user: 'cinemanode@gmail.com',
@@ -38,15 +38,15 @@ function newClient() {
 }
 
 
-var comparePassword = function (password, hash) {
+const comparePassword = function (password, hash) {
     return bcrypt.compareSync(password, hash);
 }
 
 
-var register = function (req, res) {
+const register = function (req, res) {
     const connection = newClient();
-    var userExists;
-    var vals = Object.keys(req.body).map(function (key) {
+    let userExists;
+    const vals = Object.keys(req.body).map(function (key) {
         return req.body[key];
     });
     console.log(vals); //${req.body.email}`
@@ -107,7 +107,7 @@ const sendEmailRegistered = (email, name) => {
     </body>
   </html>`;
 
-    var mailOptions = {
+    const mailOptions = {
         from: 'cinemanode@gmail.com',
         to: email,
         subject: 'Tickets Cinemanode',
@@ -125,7 +125,7 @@ const sendEmailRegistered = (email, name) => {
 
 
 
-var customers = function (req, res) {
+const customers = function (req, res) {
     const connection = newClient();
     connection.query("select * from customers", function (err, rows) {
         if (err) res.json(err);
@@ -134,7 +134,7 @@ var customers = function (req, res) {
     });
 }
 
-var deletecustomer = function (req, res) {
+const deletecustomer = function (req, res) {
     const params = req.body;
     const connection = newClient();
     connection.query("delete from customers where id=" + params.customerid, function (err, rows) {
@@ -146,7 +146,7 @@ var deletecustomer = function (req, res) {
 
 
 
-var login = function (req, res) {
+const login = function (req, res) {
     const connection = newClient();
     console.log("Jestesmy tutaj w login!");
     console.log(req.body);
@@ -170,7 +170,7 @@ var login = function (req, res) {
 };
 
 
-var memberinfo = function (req, res, next) {
+const memberinfo = function (req, res, next) {
     const connection = newClient();
     if (req.headers && req.headers.authorization && req.headers.authorization.split(' ')[0] === 'JWT') {
         jwt.verify(req.headers.authorization.split(' ')[1], 'RESTFULAPIs', function (err, decode) {
@@ -202,7 +202,7 @@ var memberinfo = function (req, res, next) {
 };
 
 
-var loginRequired = function (req, res, next) {
+const loginRequired = function (req, res, next) {
     //const connection = newClient();
     if (req.user) {
         console.log("loginRequired");

@@ -3,7 +3,7 @@ const aws = require('aws-sdk');
 const S3_BUCKET = process.env.S3_BUCKET_NAME;
 aws.config.region = 'us-east-1';
 
-var signin=function(req,res) {
+const signin=function(req,res) {
   console.log('hahaha',S3_BUCKET);
     const s3 = new aws.S3();
     const fileName = req.query['file-name'];

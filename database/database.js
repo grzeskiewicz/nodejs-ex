@@ -1,17 +1,14 @@
-var mysql = require('mysql')
-var express = require('express');
-var router = express.Router();
-var datex = require('../date/date');
-var async = require("async");
-var moment = require('moment');
+const mysql = require('mysql')
+const async = require("async");
+const moment = require('moment');
 const fs = require('fs');
 const PDFDocument = require('pdfkit')
 const { Client } = require('pg');
 
 
-var nodemailer = require('nodemailer');
+const nodemailer = require('nodemailer');
 
-var transporter = nodemailer.createTransport({
+const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
         user: 'cinemanode@gmail.com',
@@ -36,7 +33,7 @@ function newClient() {
 
 
 
-var test = function (req, res) {
+const test = function (req, res) {
     const client = newClient();
 
     client.query("SELECT s.id,f.title,f.director,f.genre,f.length,f.category,f.imageUrl,p.normal, p.discount,r.id as room,r.seats,date from showings s, prices p, rooms r, films f WHERE s.film=f.id AND s.room=r.id AND s.price=p.id", (err, result) => {
@@ -51,7 +48,7 @@ var test = function (req, res) {
 
 
 
-var showings = function (req, res) {
+const showings = function (req, res) {
     const connection = newClient();
     connection.query("select s.id,f.title,f.director,f.genre,f.length,f.category,f.imageUrl,p.normal, p.discount,r.id as room,r.seats,date from showings s, prices p, rooms r, films f where s.film=f.id AND s.room=r.id AND s.price=p.id ", function (err, rows) {
         if (err) res.json(err);
@@ -62,7 +59,7 @@ var showings = function (req, res) {
 }
 
 
-var showingsbydate = function (req, res) {
+const showingsbydate = function (req, res) {
     const connection = newClient();
     connection.query('select s.id,f.title,f.director,f.genre,f.length,f.category,f.imageUrl,p.normal, p.discount,r.id as room,r.seats,date from showings s, prices p, rooms r, films f where s.film=f.id AND s.room=r.id AND s.price=p.id AND date::text LIKE ' + "'" + req.params.date + "%'", function (err, rows) {
         if (err) throw err
@@ -74,7 +71,7 @@ var showingsbydate = function (req, res) {
 }
 
 
-var seatsshowing = function (req, res) {
+const seatsshowing = function (req, res) {
     const connection = newClient();
     connection.query("select r.seats from showings s, rooms r where r.id=s.room AND s.id='" + req.params.showingid + "'", function (err, rows) {
         if (err) throw err
@@ -86,13 +83,13 @@ var seatsshowing = function (req, res) {
 }
 
 
-var seatstaken = function (req, res) {
+const seatstaken = function (req, res) {
     const connection = newClient();
     //console.log(JSON.stringify(req.params.showingid));
     connection.query("select seat from tickets where showing='" + req.params.showingid + "'", function (err, rows) {
         if (err) throw err
-        var arr = [];
-        for (var i in rows.rows) {
+        const arr = [];
+        for (const i in rows.rows) {
             arr.push(rows.rows[i].seat);
         }
         res.json(arr);
@@ -136,7 +133,7 @@ const sendEmail = (tickets) => {
     </body>
   </html>`;
 
-    var mailOptions = {
+    const mailOptions = {
         from: 'cinemanode@gmail.com',
         to: tickets.email,
         subject: 'Tickets Cinemanode',
@@ -154,15 +151,15 @@ const sendEmail = (tickets) => {
 
 
 
-var newticket = function (req, res) {
+const newticket = function (req, res) {
     sendEmail(req.body);
     const showingDesc = req.body.showingDesc;
     delete req.body.showingDesc;
-    var vals = Object.keys(req.body).map(function (key) { // DO I NEED IT??
+    const vals = Object.keys(req.body).map(function (key) { // DO I NEED IT??
         return req.body[key];
     });
     //console.log(vals);
-    var results = [];
+    const results = [];
     vals.splice(1, 1);
     console.log(vals);
     vals.forEach(function (params) {
@@ -170,7 +167,7 @@ var newticket = function (req, res) {
             res.json({ success: false, msg: "Missing parameters" });
         }
     });
-    var seats = req.body.seats;
+    const seats = req.body.seats;
     //console.log(vals.showingDesc);
     async.forEachOf(seats, function (seat) {
         const connection = newClient();
@@ -218,7 +215,7 @@ var newticket = function (req, res) {
 
 
 
-var newshowing = function (req, res) {
+const newshowing = function (req, res) {
     const params = req.body;
     const values = Object.keys(req.body).map(function (key) {
         return req.body[key];
@@ -250,7 +247,7 @@ var newshowing = function (req, res) {
 
 
 
-var newfilm = function (req, res) {
+const newfilm = function (req, res) {
     const params = req.body;
     const values = Object.keys(req.body).map(function (key) {
         return req.body[key];
@@ -275,7 +272,7 @@ var newfilm = function (req, res) {
 }
 
 
-var newprice = function (req, res) {
+const newprice = function (req, res) {
     const params = req.body;
     const values = Object.keys(req.body).map(function (key) {
         return req.body[key];
@@ -298,7 +295,7 @@ var newprice = function (req, res) {
 }
 
 
-var deleteshowingfunc = function (showid) {
+const deleteshowingfunc = function (showid) {
     const connection = newClient();
     connection.query("DELETE FROM SHOWINGS WHERE ID=" + showid).then(res2 => {
         //  console.log(res2,showid);
@@ -306,7 +303,7 @@ var deleteshowingfunc = function (showid) {
     }).catch(e => console.error(e.stack));
 }
 
-var deleteshowing = function (req, res) {
+const deleteshowing = function (req, res) {
     const params = req.body;
     deleteshowingfunc(params.showid);
     res.json({ succes: true, msg: params.showid });
@@ -314,7 +311,7 @@ var deleteshowing = function (req, res) {
 
 
 
-var deletefilm = function (req, res) { // delete tickets(showing(film))
+const deletefilm = function (req, res) { // delete tickets(showing(film))
     const params = req.body;
     const connection = newClient();
 
@@ -330,7 +327,7 @@ var deletefilm = function (req, res) { // delete tickets(showing(film))
 
 }
 
-var editfilm = function (req, res) {
+const editfilm = function (req, res) {
     const params = req.body;
     const values = Object.keys(params).map(function (key) {
         return params[key];
@@ -350,7 +347,7 @@ var editfilm = function (req, res) {
 }
 
 
-var editcustomer = function (req, res) {
+const editcustomer = function (req, res) {
     const params = req.body;
     const values = Object.keys(params).map(function (key) {
         return params[key];
@@ -370,7 +367,7 @@ var editcustomer = function (req, res) {
 }
 
 
-var deleteprice = function (req, res) { //delete tickets(showing(price))
+const deleteprice = function (req, res) { //delete tickets(showing(price))
     const params = req.body;
     const connection = newClient();
     connection.query("DELETE FROM PRICES WHERE ID=" + params.priceid, function (err, result) {
@@ -381,7 +378,7 @@ var deleteprice = function (req, res) { //delete tickets(showing(price))
 }
 
 
-var deleteticket = function (req, res) { //delete tickets(showing(price))
+const deleteticket = function (req, res) { //delete tickets(showing(price))
     const params = req.body;
     const connection = newClient();
     connection.query("DELETE FROM TICKETS WHERE ID=" + params.ticketid, function (err, result) {
@@ -392,7 +389,7 @@ var deleteticket = function (req, res) { //delete tickets(showing(price))
 }
 
 //select t.id ,s.title, t.seat,t.price,t.email,t.status,t.purchasedate FROM tickets t, showings s WHERE t.showing=s.id"
-var ticketsquery = function (req, res) {
+const ticketsquery = function (req, res) {
     const connection = newClient();
     connection.query('select t.id, f.title, t.seat, t.price, t.email, t.status, t.purchasedate FROM tickets t, films f, showings s WHERE s.id=t.showing AND f.id=s.film', function (err, rows) {
         if (err) res.json(err);
@@ -403,7 +400,7 @@ var ticketsquery = function (req, res) {
 }
 
 
-var ticketsbycustomer = function (req, res) {
+const ticketsbycustomer = function (req, res) {
     const params = req.body;
     //console.log(params.customerid);
     const connection = newClient();
@@ -417,7 +414,7 @@ var ticketsbycustomer = function (req, res) {
 
 
 
-var showingsquery = function (req, res) {
+const showingsquery = function (req, res) {
     const connection = newClient();
     connection.query("select * from showings", function (err, rows) {
         if (err) res.json(err);
@@ -427,7 +424,7 @@ var showingsquery = function (req, res) {
 }
 
 
-var roomsquery = function (req, res) {
+const roomsquery = function (req, res) {
     const connection = newClient();
     connection.query("select * from rooms", function (err, rows) {
         if (err) res.json(err);
@@ -437,7 +434,7 @@ var roomsquery = function (req, res) {
 }
 
 
-var pricesquery = function (req, res) {
+const pricesquery = function (req, res) {
     const connection = newClient();
     connection.query("select * from prices", function (err, rows) {
         if (err) res.json(err);
@@ -447,7 +444,7 @@ var pricesquery = function (req, res) {
 }
 
 
-var filmsquery = function (req, res) {
+const filmsquery = function (req, res) {
     const connection = newClient();
     connection.query("select * from films", function (err, rows) {
         if (err) res.json(err);
@@ -458,12 +455,12 @@ var filmsquery = function (req, res) {
 
 
 
-var sendtickets = function (req, res) {
+const sendtickets = function (req, res) {
 
     const params = req.body;
     console.log(params.tickets);
 
-    var mailOptions = {
+    const mailOptions = {
         from: 'cinemanode@gmail.com',
         to: 'benuch91@gmail.com',
         subject: 'Tickets Cinemanode',

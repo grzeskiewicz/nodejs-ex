@@ -1,9 +1,9 @@
-var express = require('express'),
+const express = require('express'),
     app = express();
-var cors = require('cors');
-var http = require('http').Server(app);
-var io = require('socket.io')(http);
-var bodyParser = require('body-parser');
+const cors = require('cors');
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
+const bodyParser = require('body-parser');
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 app.use(bodyParser.json()); // support json encoded bodies 
@@ -57,7 +57,7 @@ io.on('connection', function(socket) {
 });
 
 
-var port = process.env.PORT || 8080,
+const port = process.env.PORT || 8080,
     ip = process.env.IP || '0.0.0.0';
 
 http.listen(port, ip);

@@ -1,18 +1,18 @@
-Number.prototype.padLeft = function(base, chr) {
-    var len = (String(base || 10).length - String(this).length) + 1;
+Number.prototype.padLeft = function (base, chr) {
+    let len = (String(base || 10).length - String(this).length) + 1;
     return len > 0 ? new Array(len).join(chr || '0') + this : this;
 }
 
 
-var dateNow = function() {
-    var d = new Date,
+const dateNow = function () {
+    const d = new Date,
         dformat = [d.getFullYear(),
-            (d.getMonth() + 1).padLeft(),
-            d.getDate().padLeft()
+        (d.getMonth() + 1).padLeft(),
+        d.getDate().padLeft()
         ].join('-') +
-        ' ' + [d.getHours().padLeft(),
+            ' ' + [d.getHours().padLeft(),
             d.getMinutes().padLeft()
-        ].join(':');
+            ].join(':');
     return dformat;
 }
 

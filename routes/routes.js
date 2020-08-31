@@ -1,15 +1,15 @@
-var express = require('express'),
+const express = require('express'),
     app = express();
-var cors = require('cors');
+const cors = require('cors');
 
-var bodyParser = require('body-parser');
+const bodyParser = require('body-parser');
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 app.use(bodyParser.json()); // support json encoded bodies 
 
-var db = require('../database/database');
-var user = require('../usercontroller/usercontroller');
-var upload = require('../upload/upload');
+const db = require('../database/database');
+const user = require('../usercontroller/usercontroller');
+const upload = require('../upload/upload');
 
 
 app.options('*', cors()) // include before other routes
