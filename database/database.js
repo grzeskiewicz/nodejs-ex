@@ -9,12 +9,21 @@ const { Client } = require('pg');
 const nodemailer = require('nodemailer');
 
 const transporter = nodemailer.createTransport({
+    host: 'smtp.ethereal.email',
+    port: 587,
+    auth: {
+        user: 'charlotte.kihn6@ethereal.email',
+        pass: 'YDF17aCAGwtYuXjqF8'
+    }
+});
+/*
+const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
         user: 'cinemanode@gmail.com',
         pass: 'Cinema123'
     }
-});
+});*/
 
 
 
@@ -133,9 +142,17 @@ const sendEmail = (tickets) => {
     </body>
   </html>`;
 
+    /*  const mailOptions = {
+          from: 'cinemanode@gmail.com',
+          to: tickets.email,
+          subject: 'Tickets Cinemanode',
+          html: htmlTemplate
+      };*/
+
+
     const mailOptions = {
-        from: 'cinemanode@gmail.com',
-        to: tickets.email,
+        from: 'charlotte.kihn6@ethereal.email',
+        to: email,
         subject: 'Tickets Cinemanode',
         html: htmlTemplate
     };
