@@ -19,11 +19,21 @@ app.use(function(req, res, next) {
 
 const nodemailer = require('nodemailer');
 
+/*
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
         user: 'cinemanode@gmail.com',
         pass: 'Cinema123'
+    }
+});*/
+
+const transporter = nodemailer.createTransport({
+    host: 'smtp.ethereal.email',
+    port: 587,
+    auth: {
+        user: 'charlotte.kihn6@ethereal.email',
+        pass: 'YDF17aCAGwtYuXjqF8'
     }
 });
 
