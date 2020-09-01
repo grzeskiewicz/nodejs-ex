@@ -118,7 +118,8 @@ const sendEmailRegistered = (email, name) => {
   </html>`;
 
     const mailOptions = {
-        from: 'cinemanode@gmail.com',
+        //from: 'cinemanode@gmail.com',
+        from: 'charlotte.kihn6@ethereal.email',
         to: email,
         subject: 'Tickets Cinemanode',
         html: htmlTemplate
