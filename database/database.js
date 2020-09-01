@@ -476,9 +476,17 @@ const sendtickets = function (req, res) {
 
     const params = req.body;
     console.log(params.tickets);
+    /*
+        const mailOptions = {
+            from: 'cinemanode@gmail.com',
+            to: 'benuch91@gmail.com',
+            subject: 'Tickets Cinemanode',
+            html: params.tickets
+        };*/
+
 
     const mailOptions = {
-        from: 'cinemanode@gmail.com',
+        from: 'charlotte.kihn6@ethereal.email',
         to: 'benuch91@gmail.com',
         subject: 'Tickets Cinemanode',
         html: params.tickets
