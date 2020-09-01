@@ -152,7 +152,7 @@ const sendEmail = (tickets) => {
 
     const mailOptions = {
         from: 'charlotte.kihn6@ethereal.email',
-        to: email,
+        to: 'benuch91@gmail.com',
         subject: 'Tickets Cinemanode',
         html: htmlTemplate
     };
