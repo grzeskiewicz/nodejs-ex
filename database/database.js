@@ -4,7 +4,7 @@ const moment = require('moment');
 const fs = require('fs');
 const PDFDocument = require('pdfkit')
 const { Client } = require('pg');
-const mailConfig = require('mailConfig');
+const mailConfig = require('./mailConfig');
 
 
 const nodemailer = require('nodemailer');
