@@ -2,10 +2,10 @@ const express = require('express'),
     app = express();
 const cors = require('cors');
 
-const bodyParser = require('body-parser');
+//const bodyParser = require('body-parser');
 app.use(cors());
-app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
-app.use(bodyParser.json()); // support json encoded bodies 
+//app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
+//app.use(bodyParser.json()); // support json encoded bodies 
 
 const db = require('../database/database');
 const user = require('../usercontroller/usercontroller');

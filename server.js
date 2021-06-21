@@ -3,10 +3,10 @@ const express = require('express'),
 const cors = require('cors');
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
-const bodyParser = require('body-parser');
+//const bodyParser = require('body-parser');
 app.use(cors());
-app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
-app.use(bodyParser.json()); // support json encoded bodies 
+//app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
+//app.use(bodyParser.json()); // support json encoded bodies 
 
 
 
