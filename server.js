@@ -19,7 +19,7 @@ const routes = require('./routes/routes');
 app.use('/', routes);
 
 
-/*
+
 
 io.on('connection', function(socket) {
     socket.broadcast.emit('hi');
@@ -33,7 +33,7 @@ io.on('connection', function(socket) {
         io.emit('seatstakennow', { showing: ticket.showing, seats: ticket.seats });
         io.emit('seatstakennow2', { ticket:ticket });
     });
-});*/
+});
 
 
 const port = process.env.PORT || 8080,

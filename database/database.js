@@ -4,12 +4,12 @@ const moment = require('moment');
 const fs = require('fs');
 const PDFDocument = require('pdfkit')
 const { Client } = require('pg');
-const mailConfig = require('../mailConfig.js');
+//const mailConfig = require('../mailConfig.js');
 
 
 const nodemailer = require('nodemailer');
 
-const transporter = nodemailer.createTransport(mailConfig.config);
+//const transporter = nodemailer.createTransport(mailConfig.config);
 
 /*
 const transporter = nodemailer.createTransport({
