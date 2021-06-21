@@ -4,18 +4,13 @@ const moment = require('moment');
 const fs = require('fs');
 const PDFDocument = require('pdfkit')
 const { Client } = require('pg');
+const mailConfig = require('mailConfig');
 
 
 const nodemailer = require('nodemailer');
 
-const transporter = nodemailer.createTransport({
-    host: 'smtp.ethereal.email',
-    port: 587,
-    auth: {
-        user: 'charlotte.kihn6@ethereal.email',
-        pass: 'YDF17aCAGwtYuXjqF8'
-    }
-});
+const transporter = nodemailer.createTransport(mailConfig.config);
+
 /*
 const transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -151,8 +146,8 @@ const sendEmail = (tickets) => {
 
 
     const mailOptions = {
-        from: 'charlotte.kihn6@ethereal.email',
-        to: 'benuch91@gmail.com',
+        from: 'cinemanode.api@gmail.com',
+        to: tickets.email,
         subject: 'Tickets Cinemanode',
         html: htmlTemplate
     };
